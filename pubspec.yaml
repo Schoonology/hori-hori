@@ -1,0 +1,5 @@
+name: hori_hori
+description: A Swiss Army knife for versioning and releasing Flutter-based software.
+version: 1.0.0
+
+dependencies:
