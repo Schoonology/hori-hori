@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:args/command_runner.dart';
 
 import 'commands/bump.dart';
-import 'commands/info.dart';
+import 'commands/version.dart';
 
 const defaultCommand = 'version';
 const defaultInputFile = 'pubspec.yaml';
@@ -27,7 +27,7 @@ CommandRunner buildRunner() => CommandRunner(
       'A Swiss Army knife for versioning and releasing Flutter-based software.',
     )
       ..addCommand(BumpCommand())
-      ..addCommand(InfoCommand())
+      ..addCommand(VersionCommand())
       ..argParser.addOption('file',
           abbr: 'f',
           defaultsTo: 'pubspec.yaml',

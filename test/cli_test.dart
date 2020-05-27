@@ -21,9 +21,9 @@ void main() {
   tearDownAll(() => File.fromUri(Uri.parse(activeFile)).delete());
 
   group('Hori-Hori CLI', () {
-    group('hori-hori info', () {
+    group('hori-hori version', () {
       test('should print version information', () async {
-        final result = await runHoriHori(['info']);
+        final result = await runHoriHori(['version']);
 
         expect(result.exitCode, 0);
         expect(result.stdout, contains('1.2.3+4'));
@@ -40,8 +40,8 @@ void main() {
             final bumpResult = await runHoriHori(['bump', key]);
             expect(bumpResult.exitCode, 0);
 
-            final infoResult = await runHoriHori(['info']);
-            expect(infoResult.stdout, contains(value));
+            final versionResult = await runHoriHori(['version']);
+            expect(versionResult.stdout, contains(value));
           }));
     });
   });
