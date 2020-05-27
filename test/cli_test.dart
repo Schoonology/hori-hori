@@ -26,22 +26,31 @@ void main() {
         final result = await runHoriHori(['version']);
 
         expect(result.exitCode, 0);
-        expect(result.stdout, contains('1.2.3+4'));
+        expect(result.stdout, contains('Hori-Hori version 1.0.0'));
+      });
+    });
+
+    group('hori-hori current', () {
+      test('should print current package version', () async {
+        final result = await runHoriHori(['current']);
+
+        expect(result.exitCode, 0);
+        expect(result.stdout, '1.2.3+4\n');
       });
     });
 
     group('hori-hori bump', () {
       <String, String>{
-        'major': '2.0.0',
-        'minor': '1.3.0',
-        'patch': '1.2.4',
-        'build': '1.2.3+5',
+        'major': '2.0.0\n',
+        'minor': '1.3.0\n',
+        'patch': '1.2.4\n',
+        'build': '1.2.3+5\n',
       }.forEach((key, value) => test('$key bumps $key version', () async {
             final bumpResult = await runHoriHori(['bump', key]);
             expect(bumpResult.exitCode, 0);
 
-            final versionResult = await runHoriHori(['version']);
-            expect(versionResult.stdout, contains(value));
+            final currentResult = await runHoriHori(['current']);
+            expect(currentResult.stdout, value);
           }));
     });
   });
