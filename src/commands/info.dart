@@ -11,12 +11,10 @@ class InfoCommand extends HoriHoriCommand {
   String get name => 'info';
 
   void run() async {
-    final inputFile = File.fromUri(fileUri);
-
     print('Hori-Hori version: 1.0.0');
     print('Dart SDK version: ${Platform.version}');
 
-    final lines = await inputFile.readAsLines();
+    final lines = await readLines();
     for (var line in lines) {
       final version = getVersion(line);
       if (version != null) {
