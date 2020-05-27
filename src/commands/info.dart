@@ -1,11 +1,9 @@
 import 'dart:io';
 
-import 'package:args/command_runner.dart';
-
 import '../cli.dart';
 import '../pubspec.dart';
 
-class InfoCommand extends Command {
+class InfoCommand extends HoriHoriCommand {
   @override
   String get description => 'Print version information, then exit.';
 
@@ -13,8 +11,7 @@ class InfoCommand extends Command {
   String get name => 'info';
 
   void run() async {
-    final inputUri = Uri.file(defaultInputFile);
-    final inputFile = File.fromUri(inputUri);
+    final inputFile = File.fromUri(fileUri);
 
     print('Hori-Hori version: 1.0.0');
     print('Dart SDK version: ${Platform.version}');

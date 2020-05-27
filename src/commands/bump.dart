@@ -5,74 +5,70 @@ import 'package:args/command_runner.dart';
 import '../cli.dart';
 import '../pubspec.dart';
 
-void transformVersion(Version Function(Version) transform) async {
-  final inputUri = Uri.file(defaultInputFile);
-  final inputFile = File.fromUri(inputUri);
+abstract class VersionTransformCommand extends HoriHoriCommand {
+  Version transform(Version version);
 
-  final lines = await inputFile.readAsLines();
-  final output = [];
-  for (var line in lines) {
-    final version = getVersion(line);
-    if (version != null) {
-      line = 'version: ${transform(version)}';
+  void run() async {
+    final inputFile = File.fromUri(fileUri);
+
+    final lines = await inputFile.readAsLines();
+    final output = [];
+    for (var line in lines) {
+      final version = getVersion(line);
+      if (version != null) {
+        line = 'version: ${transform(version)}';
+      }
+      output.add(line);
     }
-    output.add(line);
-  }
 
-  await inputFile.writeAsString(output.join('\n') + '\n');
+    await inputFile.writeAsString(output.join('\n') + '\n');
+  }
 }
 
-class _BumpMajorCommand extends Command {
+class _BumpMajorCommand extends VersionTransformCommand {
   @override
   String get description => 'Bump major version.';
 
   @override
   String get name => 'major';
 
-  void run() async {
-    await transformVersion((version) => version.nextMajor);
-  }
+  @override
+  Version transform(Version version) => version.nextMajor;
 }
 
-class _BumpMinorCommand extends Command {
+class _BumpMinorCommand extends VersionTransformCommand {
   @override
   String get description => 'Bump minor version.';
 
   @override
   String get name => 'minor';
 
-  void run() async {
-    await transformVersion((version) => version.nextMinor);
-  }
+  @override
+  Version transform(Version version) => version.nextMinor;
 }
 
-class _BumpPatchCommand extends Command {
+class _BumpPatchCommand extends VersionTransformCommand {
   @override
   String get description => 'Bump patch version.';
 
   @override
   String get name => 'patch';
 
-  void run() async {
-    await transformVersion((version) => version.nextPatch);
-  }
+  @override
+  Version transform(Version version) => version.nextPatch;
 }
 
-class _BumpBuildCommand extends Command {
+class _BumpBuildCommand extends VersionTransformCommand {
   @override
   String get description => 'Bump build number.';
 
   @override
   String get name => 'build';
 
-  void run() async {
-    await transformVersion((version) => Version(
-          version.major,
-          version.minor,
-          version.patch,
-          build: _incrementBuild(version.build),
-        ));
-  }
+  @override
+  Version transform(Version version) =>
+      Version(version.major, version.minor, version.patch,
+          build: _incrementBuild(version.build));
 
   String _incrementBuild(List<dynamic> build) {
     bool bumped = false;
