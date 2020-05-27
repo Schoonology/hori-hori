@@ -1,10 +1,13 @@
 .DEFAULT_GOAL := hori-hori
-.PHONY: install
+.PHONY: install test
 
 OUT_DIR=build
 
 install:
 	ln -sf `pwd .`/$(OUT_DIR)/hori-hori /usr/local/bin/hori-hori
+
+test:
+	pub run test
 
 $(OUT_DIR):
 	mkdir -p ./$(OUT_DIR)

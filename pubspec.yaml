@@ -3,3 +3,7 @@ description: A Swiss Army knife for versioning and releasing Flutter-based softw
 version: 1.0.0
 
 dependencies:
+  pub_semver: ^1.4.4
+
+dev_dependencies:
+  test: ^1.6.3
