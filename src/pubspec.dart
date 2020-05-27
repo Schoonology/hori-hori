@@ -13,3 +13,14 @@ Version getVersion(String line) {
 
   return Version.parse(versionRegex.firstMatch(line).group(0));
 }
+
+Version searchVersion(Iterable<String> lines) {
+  for (var line in lines) {
+    final version = getVersion(line);
+    if (version != null) {
+      return version;
+    }
+  }
+
+  return null;
+}

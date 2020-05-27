@@ -2,6 +2,9 @@ import '../cli.dart';
 import '../pubspec.dart';
 
 abstract class VersionTransformCommand extends HoriHoriCommand {
+  @override
+  bool get takesArguments => false;
+
   Version transformVersion(Version version);
 
   void run() async => transformInputFile((line) {
