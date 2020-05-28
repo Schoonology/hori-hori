@@ -53,5 +53,50 @@ void main() {
             expect(currentResult.stdout, value);
           }));
     });
+
+    group('hori-hori updated', () {
+      test('Returns 1 if the versions are the same', () async {
+        final updatedResult = await runHoriHori(['updated', '1.2.3+4']);
+
+        expect(updatedResult.exitCode, 1);
+      });
+
+      test('Returns 1 if the given version is newer than the current version',
+          () async {
+        expect((await runHoriHori(['updated', '1.2.4'])).exitCode, 1);
+        expect((await runHoriHori(['updated', '1.3.0'])).exitCode, 1);
+        expect((await runHoriHori(['updated', '2.0.0'])).exitCode, 1);
+        expect((await runHoriHori(['updated', '1.2.3+5'])).exitCode, 1);
+      });
+
+      test('Returns 0 if the given version is older than the current version',
+          () async {
+        expect((await runHoriHori(['updated', '1.2.2'])).exitCode, 0);
+        expect((await runHoriHori(['updated', '1.0.0'])).exitCode, 0);
+        expect((await runHoriHori(['updated', '0.2.0'])).exitCode, 0);
+        expect((await runHoriHori(['updated', '1.2.3+3'])).exitCode, 0);
+      });
+
+      test('Fails if no argument provided', () async {
+        final updatedResult = await runHoriHori(['updated']);
+
+        expect(updatedResult.exitCode, 1);
+        expect(updatedResult.stderr, isNotEmpty);
+      });
+
+      test('Fails if 2+ arguments provided', () async {
+        final updatedResult = await runHoriHori(['updated', 'one', 'two']);
+
+        expect(updatedResult.exitCode, 1);
+        expect(updatedResult.stderr, isNotEmpty);
+      });
+
+      test('Fails if bad argument provided', () async {
+        final updatedResult = await runHoriHori(['updated', 'bad']);
+
+        expect(updatedResult.exitCode, 1);
+        expect(updatedResult.stderr, isNotEmpty);
+      });
+    });
   });
 }

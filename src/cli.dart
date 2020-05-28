@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:args/command_runner.dart';
 
 import 'commands/bump.dart';
+import 'commands/updated.dart';
 import 'commands/current.dart';
 import 'commands/version.dart';
 
@@ -28,6 +29,7 @@ CommandRunner buildRunner() => CommandRunner(
       'A Swiss Army knife for versioning and releasing Flutter-based software.',
     )
       ..addCommand(BumpCommand())
+      ..addCommand(UpdatedCommand())
       ..addCommand(CurrentCommand())
       ..addCommand(VersionCommand())
       ..argParser.addOption('file',
