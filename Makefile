@@ -8,6 +8,7 @@ install:
 
 test:
 	pub run test
+	bats test/scripting_test.bats
 
 $(OUT_DIR):
 	mkdir -p ./$(OUT_DIR)
