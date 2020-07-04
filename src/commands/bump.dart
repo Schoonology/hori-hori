@@ -1,6 +1,35 @@
 import '../cli.dart';
 import '../pubspec.dart';
 
+String _incrementBuild(List<dynamic> build) {
+  bool bumped = false;
+  final results = [];
+
+  for (final segment in build) {
+    if (segment is int) {
+      bumped = true;
+      results.add(segment + 1);
+    } else {
+      results.add(segment);
+    }
+  }
+
+  if (!bumped) {
+    results.add(1);
+  }
+
+  return results.join('.');
+}
+
+extension WithBuild on Version {
+  Version get nextBuild => Version(
+        major,
+        minor,
+        patch,
+        build: _incrementBuild(build),
+      );
+}
+
 abstract class VersionTransformCommand extends HoriHoriCommand {
   @override
   bool get takesArguments => false;
@@ -25,7 +54,7 @@ class _BumpMajorCommand extends VersionTransformCommand {
   String get name => 'major';
 
   @override
-  Version transformVersion(Version version) => version.nextMajor;
+  Version transformVersion(Version version) => version.nextMajor.nextBuild;
 }
 
 class _BumpMinorCommand extends VersionTransformCommand {
@@ -36,7 +65,7 @@ class _BumpMinorCommand extends VersionTransformCommand {
   String get name => 'minor';
 
   @override
-  Version transformVersion(Version version) => version.nextMinor;
+  Version transformVersion(Version version) => version.nextMinor.nextBuild;
 }
 
 class _BumpPatchCommand extends VersionTransformCommand {
@@ -47,7 +76,7 @@ class _BumpPatchCommand extends VersionTransformCommand {
   String get name => 'patch';
 
   @override
-  Version transformVersion(Version version) => version.nextPatch;
+  Version transformVersion(Version version) => version.nextPatch.nextBuild;
 }
 
 class _BumpBuildCommand extends VersionTransformCommand {
@@ -58,29 +87,7 @@ class _BumpBuildCommand extends VersionTransformCommand {
   String get name => 'build';
 
   @override
-  Version transformVersion(Version version) =>
-      Version(version.major, version.minor, version.patch,
-          build: _incrementBuild(version.build));
-
-  static String _incrementBuild(List<dynamic> build) {
-    bool bumped = false;
-    final results = [];
-
-    for (final segment in build) {
-      if (segment is int) {
-        bumped = true;
-        results.add(segment + 1);
-      } else {
-        results.add(segment);
-      }
-    }
-
-    if (!bumped) {
-      results.add(1);
-    }
-
-    return results.join('.');
-  }
+  Version transformVersion(Version version) => version.nextBuild;
 }
 
 class BumpCommand extends HoriHoriCommand {
