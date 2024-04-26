@@ -12,12 +12,12 @@ install:
 	ln -sf `pwd .`/$(OUT_DIR)/hori-hori /usr/local/bin/hori-hori
 
 test:
-	pub run test
+	dart pub run test
 	bats test/scripting_test.bats
 
 $(OUT_DIR):
 	mkdir -p ./$(OUT_DIR)
 
 $(OUT_DIR)/hori-hori: $(OUT_DIR) $(DART_FILES)
-	pub get
-	dart2native main.dart -o $(OUT_DIR)/hori-hori
+	dart pub get
+	dart compile exe main.dart -o $(OUT_DIR)/hori-hori

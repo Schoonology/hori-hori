@@ -11,7 +11,7 @@ const defaultCommand = 'version';
 const defaultInputFile = 'pubspec.yaml';
 
 abstract class HoriHoriCommand extends Command {
-  String get filePath => globalResults['file'];
+  String get filePath => globalResults!['file'];
 
   Uri get fileUri => Uri.file(filePath);
 

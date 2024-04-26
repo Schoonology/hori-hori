@@ -6,15 +6,20 @@ final versionLineRegex = RegExp('version: ${versionRegex.pattern}');
 
 bool isVersionLine(String line) => versionLineRegex.hasMatch(line);
 
-Version getVersion(String line) {
+Version? getVersion(String line) {
   if (!isVersionLine(line)) {
     return null;
   }
 
-  return Version.parse(versionRegex.firstMatch(line).group(0));
+  final regexMatch = versionRegex.firstMatch(line)?.group(0);
+  if (regexMatch == null) {
+    return null;
+  }
+
+  return Version.parse(regexMatch);
 }
 
-Version searchVersion(Iterable<String> lines) {
+Version? searchVersion(Iterable<String> lines) {
   for (var line in lines) {
     final version = getVersion(line);
     if (version != null) {

@@ -20,9 +20,14 @@ Example: hori-hori updated 1.2.3+4''';
   @override
   String get summary => 'Check if the version has been updated.';
 
-  Version get other {
+  Version? get other {
     try {
-      return Version.parse(argResults.arguments.single);
+      final argument = argResults?.arguments.single;
+      if (argument == null) {
+        return null;
+      }
+
+      return Version.parse(argument);
     } on FormatException catch (_) {
       rethrow;
     } on Object catch (_) {
@@ -33,7 +38,7 @@ Example: hori-hori updated 1.2.3+4''';
   void run() async {
     final current = searchVersion(await readLines());
 
-    if (current > other) {
+    if (current == null || (other != null && current > other!)) {
       exitCode = 0;
     } else {
       exitCode = 1;
